@@ -4,15 +4,12 @@ import java.io.InputStream;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.os.Handler;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -51,7 +48,7 @@ public class ImageDisplay extends Activity {
         text.setVisibility(View.VISIBLE);
         image.setImageBitmap(bitmap);
 
-        Inbox_Activity.timer.start();
+        InboxActivity.timer.start();
         timer = new CountDownTimer(10000, 100) {
             int secondsLeft = 0;
 

@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.preference.Preference;
 
 import com.snapchat.util.AppStorage;
 
@@ -22,7 +21,7 @@ public class SplashActivity extends Activity {
             @Override
             public void run() {
                 if(AppStorage.getInstance(getApplicationContext()).isUserLoggedIn()) {
-                    startActivity(new Intent(SplashActivity.this, Inbox_Activity.class));
+                    startActivity(new Intent(SplashActivity.this, InboxActivity.class));
                 } else {
                     startActivity(new Intent(SplashActivity.this, RegisterAndLoginActivity.class));
                 }

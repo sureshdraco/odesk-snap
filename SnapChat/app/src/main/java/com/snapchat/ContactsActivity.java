@@ -38,7 +38,6 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.appcelerator.cloud.sdk.CCMeta;
 import com.appcelerator.cloud.sdk.CCRequestMethod;
@@ -218,7 +217,7 @@ public class ContactsActivity extends Activity {
 
         EditText Search_txt = (EditText) findViewById(R.id.contacts_editText);
         Search_txt.setTextSize((float) (0.03 * height));
-        Search_txt.setTypeface(Inbox_Activity.type1);
+        Search_txt.setTypeface(InboxActivity.type1);
         Search_txt.setTextColor(Color.parseColor("#888888"));
         Search_txt.addTextChangedListener(new TextWatcher() {
 
@@ -254,7 +253,7 @@ public class ContactsActivity extends Activity {
         JSONArray chats = null;
 
         try {
-            CCResponse response = Inbox_Activity.sdk.sendRequest("chats/create.json",
+            CCResponse response = InboxActivity.sdk.sendRequest("chats/create.json",
                     CCRequestMethod.POST, data);
 
             JSONObject responseJSON = response.getResponseData();
@@ -326,7 +325,7 @@ public class ContactsActivity extends Activity {
         try {
 
             fb_friend = new ArrayList<Friend>();
-            CCResponse response = Inbox_Activity.sdk.sendRequest("social/facebook/search_friends.json", CCRequestMethod.GET, null);
+            CCResponse response = InboxActivity.sdk.sendRequest("social/facebook/search_friends.json", CCRequestMethod.GET, null);
             JSONObject responseJSON = response.getResponseData();
             CCMeta meta = response.getMeta();
             if ("ok".equals(meta.getStatus())
@@ -422,7 +421,7 @@ public class ContactsActivity extends Activity {
                 txtName = (TextView) holder.findViewById(R.id.contacts_item_text);
                 txtName.setTextSize((float) (Height * 0.0296));
                 txtName.setTextColor(Color.parseColor("#333333"));
-                txtName.setTypeface(Inbox_Activity.type1);
+                txtName.setTypeface(InboxActivity.type1);
                 if (txtName != null)
                     txtName.setText(WordUtils.capitalize(mDisplayedValues.get(position).USER_NAME));
 

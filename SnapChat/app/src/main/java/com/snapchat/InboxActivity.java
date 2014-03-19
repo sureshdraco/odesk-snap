@@ -2,6 +2,8 @@ package com.snapchat;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Timer;
@@ -32,6 +34,7 @@ import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import com.appcelerator.cloud.push.CCPushService;
 import com.appcelerator.cloud.push.DeviceTokenCallback;
@@ -41,10 +44,15 @@ import com.appcelerator.cloud.sdk.CCRequestMethod;
 import com.appcelerator.cloud.sdk.CCResponse;
 import com.appcelerator.cloud.sdk.Cocoafish;
 import com.appcelerator.cloud.sdk.CocoafishError;
+import com.habosa.javasnap.Snap;
+import com.habosa.javasnap.Snapchat;
+import com.snapchat.util.AppStorage;
+import com.snapchat.util.Constants;
 
-public class Inbox_Activity extends Activity {
+public class InboxActivity extends Activity {
 
-    Timer repeat_timer;
+    private static final String TAG = InboxActivity.class.getSimpleName();
+    Timer repeat_timer = new Timer();
     Uri mUri;
     int width, height;
     DisplayMetrics metrics = new DisplayMetrics();
@@ -58,40 +66,12 @@ public class Inbox_Activity extends Activity {
     RelativeLayout main;
     private SharedPreferences mPrefs;
     public static String USER_ID;
-    CCPushService Push_Service;
-    String Device_Token;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        // TODO Auto-generated method stub
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_inbox);
-
         List_View = (ListView) findViewById(R.id.inbox_listview);
-        sdk = new Cocoafish("3y8Yl3hMHZhq5oewscFVLwiSmr8tUnhz");
-        CreateUser();
-
-//		Push_Service = CCPushService.getInstance();
-//		Push_Service.getDeviceTokenAsnyc(getApplicationContext(), "3y8Yl3hMHZhq5oewscFVLwiSmr8tUnhz", new DeviceTokenCallback(){
-//
-//			@Override
-//			public void receivedDeviceToken(String arg0) {
-//				Device_Token = arg0;
-//				try {
-//					Push_Service.startService(getApplicationContext());
-//				} catch (PushServiceException e) {
-//					// TODO Auto-generated catch block
-//					e.printStackTrace();
-//				}
-//			}
-//
-//			@Override
-//			public void failedReceiveDeviceToken(Throwable arg0) {
-//				// TODO Auto-generated method stub
-//
-//			}
-//		});
-
 
         type1 = Typeface.createFromAsset(getAssets(), "KozGoPro-Light.otf");
         type2 = Typeface.createFromAsset(getAssets(), "KozGoPro-Medium.otf");
@@ -127,7 +107,7 @@ public class Inbox_Activity extends Activity {
                 intent.putExtra("return-data", true);
                 startActivityForResult(intent, 1);
 //				
-//				Intent intent = new Intent(Inbox_Activity.this,ContactsActivity.class);
+//				Intent intent = new Intent(InboxActivity.this,ContactsActivity.class);
 //		        intent.putExtra("filepath", "");
 //		        startActivity(intent);
             }
@@ -143,8 +123,8 @@ public class Inbox_Activity extends Activity {
 
             @Override
             public void onClick(View v) {
-//				startActivity(new Intent(Inbox_Activity.this,ContactsActivity.class));
-
+                //startActivity(new Intent(InboxActivity.this, ContactsActivity.class));
+                Toast.makeText(getApplicationContext(), "To be implemented", Toast.LENGTH_LONG).show();
             }
         });
 
@@ -157,10 +137,10 @@ public class Inbox_Activity extends Activity {
                 try {
                     Log.e("item", "" + position);
                     JSONObject json = chats.getJSONObject(position);
-                    ProjectDatabaseHandler handler = new ProjectDatabaseHandler(Inbox_Activity.this);
+                    ProjectDatabaseHandler handler = new ProjectDatabaseHandler(InboxActivity.this);
                     handler.addMessage(json.getString("id"));
                     handler.close();
-                    Intent intent = new Intent(Inbox_Activity.this, ImageDisplay.class);
+                    Intent intent = new Intent(InboxActivity.this, ImageDisplay.class);
                     intent.putExtra("url", json.getJSONObject("photo").getJSONObject("urls").getString("original"));
                     startActivity(intent);
                 } catch (JSONException e) {
@@ -207,9 +187,9 @@ public class Inbox_Activity extends Activity {
                     public void run() {
                         try {
                             System.out.println("sdgdsfgadfgfd" + count);
-                            ProgressDialog dialog = new ProgressDialog(Inbox_Activity.this);
+                            ProgressDialog dialog = new ProgressDialog(InboxActivity.this);
                             dialog.setMessage("Getting Chats");
-                            AsyncTask_getchats task = new AsyncTask_getchats(dialog, Inbox_Activity.this, 3);
+                            AsyncTask_getchats task = new AsyncTask_getchats(dialog, InboxActivity.this, 3);
                             task.execute("");
                             count++;
                         } catch (Exception e) {
@@ -222,12 +202,6 @@ public class Inbox_Activity extends Activity {
         };
         repeat_timer.schedule(doAsynchronousTask, 0, 20000);//execute in every 50000 ms
 
-    }
-
-    @Override
-    protected void onPause() {
-        // TODO Auto-generated method stub
-        super.onPause();
     }
 
     @Override
@@ -264,7 +238,7 @@ public class Inbox_Activity extends Activity {
             if (resultCode == RESULT_OK) {
                 String path = mUri.getPath();
                 Log.e("FilePath", "" + path);
-                Intent intent = new Intent(Inbox_Activity.this, PaintActivity.class);
+                Intent intent = new Intent(InboxActivity.this, PaintActivity.class);
                 intent.putExtra("filepath", path);
                 startActivity(intent);
             }
@@ -319,57 +293,21 @@ public class Inbox_Activity extends Activity {
     }
 
     public void CreateUser() {
-        ProgressDialog dialog = new ProgressDialog(Inbox_Activity.this);
+        ProgressDialog dialog = new ProgressDialog(InboxActivity.this);
         dialog.setMessage("Connecting to Server");
-        AsyncTask_getchats task = new AsyncTask_getchats(dialog, Inbox_Activity.this, 1);
+        AsyncTask_getchats task = new AsyncTask_getchats(dialog, InboxActivity.this, 1);
         task.execute("");
     }
 
     public void getChats(int id) {
-        Map<String, Object> data = new HashMap<String, Object>();
-        data.put("participate_ids",
-                USER_ID);
-        /*data.put(
-                "where",
-				"{'created_at':{'$gte':'2011-11-17T22:53:48+0000'}, 'coordinates':{'$nearSphere':[-122.23,37.12], '$maxDistance' : 0.00126}}");*/
-        data.put("order", "-created_at");
-        data.put("limit", "500");
-        try {
-            CCResponse response = sdk.sendRequest("chats/query.json",
-                    CCRequestMethod.GET, data);
-            JSONObject responseJSON = response.getResponseData();
-            CCMeta meta = response.getMeta();
-            Log.e("", "" + meta.getStatus() + "---" + meta.getCode() + "====" + meta.getMethod());
-            if ("ok".equals(meta.getStatus()) && meta.getCode() == 200 && "queryChatMessages".equals(meta.getMethod())) {
-                try {
-                    if (id == 1) {
-                        chats = responseJSON.getJSONArray("chats");
-                    } else {
-                        chats_new = responseJSON.getJSONArray("chats");
-                    }
-
-                    //chats = responseJSON.getJSONArray("chats");
-//				for (int i = 0; i < chats.length(); i++) {
-//					JSONObject chat = chats.getJSONObject(i);
-//
-//				}
-                } catch (JSONException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                }
-            }
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (CocoafishError e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
+        //todo get chats from server?
     }
 
     public void showChats() {
-        // TODO Auto-generated method stub
-        Log.e("JS", "" + chats.length() + "--");
+        ArrayList<Snap> snapArrayList = (ArrayList<Snap>) Arrays.asList(Snapchat.getSnaps(AppStorage.getInstance(getApplicationContext()).getLoginObject()));
+        for (Snap snap : snapArrayList) {
+            Log.d(TAG, snap.toString());
+        }
         if (List_View.getAdapter() != null) {
             List_View.setAdapter(null);
         }
@@ -381,9 +319,9 @@ public class Inbox_Activity extends Activity {
 
     public void retrievechats() {
         if (USER_ID != null) {
-            ProgressDialog dialog = new ProgressDialog(Inbox_Activity.this);
+            ProgressDialog dialog = new ProgressDialog(InboxActivity.this);
             dialog.setMessage("Subscribing");
-            AsyncTask_getchats task = new AsyncTask_getchats(dialog, Inbox_Activity.this, 4);
+            AsyncTask_getchats task = new AsyncTask_getchats(dialog, InboxActivity.this, 4);
             task.execute("");
         }
     }
@@ -456,10 +394,10 @@ public class Inbox_Activity extends Activity {
 class AsyncTask_getchats extends AsyncTask<String, String, String> {
 
     ProgressDialog P_Dialog;
-    Inbox_Activity Inbox;
+    InboxActivity Inbox;
     int ID;
 
-    public AsyncTask_getchats(ProgressDialog dialog, Inbox_Activity inbox, int id) {
+    public AsyncTask_getchats(ProgressDialog dialog, InboxActivity inbox, int id) {
         P_Dialog = dialog;
         Inbox = inbox;
         ID = id;
@@ -476,7 +414,7 @@ class AsyncTask_getchats extends AsyncTask<String, String, String> {
     @Override
     protected String doInBackground(String... params) {
         if (ID == 1) {
-            Inbox.UserSocialIntegration();
+            //Inbox.UserSocialIntegration();
         } else if (ID == 2) {
             Inbox.getChats(1);
         } else if (ID == 3) {

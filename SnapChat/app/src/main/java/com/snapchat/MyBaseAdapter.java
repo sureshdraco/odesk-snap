@@ -103,10 +103,10 @@ public class MyBaseAdapter extends BaseAdapter {
             time = (TextView) holder.findViewById(R.id.item_text2);
             txtName.setTextSize((float) (height * 0.0306));
             txtName.setTextColor(Color.parseColor("#333333"));
-            txtName.setTypeface(Inbox_Activity.type2);
+            txtName.setTypeface(InboxActivity.type2);
             time.setTextSize((float) (height * 0.019));
             time.setTextColor(Color.parseColor("#808080"));
-            time.setTypeface(Inbox_Activity.type1);
+            time.setTypeface(InboxActivity.type1);
             bin = (ImageView) holder.findViewById(R.id.item_image);
 
             JSONObject json;
@@ -129,7 +129,7 @@ public class MyBaseAdapter extends BaseAdapter {
                     if (json.getString("id").equalsIgnoreCase(ids.get(i))) {
                         is_checked = true;
                         Log.v("Checkid", "" + json.getString("id") + "----" + ids.get(i) + "---" + position);
-                        txtName.setTypeface(Inbox_Activity.type1);
+                        txtName.setTypeface(InboxActivity.type1);
                     }
                 }
 
@@ -148,10 +148,10 @@ public class MyBaseAdapter extends BaseAdapter {
 //			time = (TextView) holder.findViewById(R.id.item_text2);			
 //			txtName.setTextSize((float) (height*0.0306));
 //			txtName.setTextColor(Color.parseColor("#333333"));
-//			txtName.setTypeface(Inbox_Activity.type2);
+//			txtName.setTypeface(InboxActivity.type2);
 //			time.setTextSize((float) (height*0.019));
 //			time.setTextColor(Color.parseColor("#808080"));
-//			time .setTypeface(Inbox_Activity.type1);
+//			time .setTypeface(InboxActivity.type1);
 //			bin = (ImageView)holder.findViewById(R.id.item_image);
 //			
 //			JSONObject json;
@@ -168,7 +168,7 @@ public class MyBaseAdapter extends BaseAdapter {
 //					if(json.getString("id").equalsIgnoreCase(ids.get(i))){					
 //						is_checked = true;
 //						Log.v("Checkid", ""+json.getString("id")+"----"+ids.get(i)+"---"+position);
-//						txtName.setTypeface(Inbox_Activity.type1);
+//						txtName.setTypeface(InboxActivity.type1);
 //					}
 //				}
 //

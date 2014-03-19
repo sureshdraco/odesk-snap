@@ -33,7 +33,7 @@
         </activity>
 
         <activity
-            android:name="com.snapchat.Inbox_Activity"
+            android:name=".InboxActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen" />
 

@@ -2,34 +2,34 @@
 <merger>
 
     <dataSet config="main" >
-        <source path="/Users/suresh/Documents/odesk/SnapChat/android-image-filter/res" >
+        <source path="/Users/suresh/Documents/odesk/odesk-snap/SnapChat/android-image-filter/res" >
             <file
                 name="ic_launcher"
-                path="/Users/suresh/Documents/odesk/SnapChat/android-image-filter/res/drawable-hdpi/ic_launcher.png"
+                path="/Users/suresh/Documents/odesk/odesk-snap/SnapChat/android-image-filter/res/drawable-hdpi/ic_launcher.png"
                 qualifiers="hdpi"
                 type="drawable" />
             <file
                 name="test"
-                path="/Users/suresh/Documents/odesk/SnapChat/android-image-filter/res/drawable-hdpi/test.jpg"
+                path="/Users/suresh/Documents/odesk/odesk-snap/SnapChat/android-image-filter/res/drawable-hdpi/test.jpg"
                 qualifiers="hdpi"
                 type="drawable" />
             <file
                 name="ic_launcher"
-                path="/Users/suresh/Documents/odesk/SnapChat/android-image-filter/res/drawable-ldpi/ic_launcher.png"
+                path="/Users/suresh/Documents/odesk/odesk-snap/SnapChat/android-image-filter/res/drawable-ldpi/ic_launcher.png"
                 qualifiers="ldpi"
                 type="drawable" />
             <file
                 name="ic_launcher"
-                path="/Users/suresh/Documents/odesk/SnapChat/android-image-filter/res/drawable-mdpi/ic_launcher.png"
+                path="/Users/suresh/Documents/odesk/odesk-snap/SnapChat/android-image-filter/res/drawable-mdpi/ic_launcher.png"
                 qualifiers="mdpi"
                 type="drawable" />
             <file
                 name="main"
-                path="/Users/suresh/Documents/odesk/SnapChat/android-image-filter/res/layout/main.xml"
+                path="/Users/suresh/Documents/odesk/odesk-snap/SnapChat/android-image-filter/res/layout/main.xml"
                 qualifiers=""
                 type="layout" />
             <file
-                path="/Users/suresh/Documents/odesk/SnapChat/android-image-filter/res/values/strings.xml"
+                path="/Users/suresh/Documents/odesk/odesk-snap/SnapChat/android-image-filter/res/values/strings.xml"
                 qualifiers="" >
                 <string name="app_name" >RagnarokFilter
                 </string>
@@ -37,11 +37,11 @@
                 </string>
             </file>
         </source>
-        <source path="/Users/suresh/Documents/odesk/SnapChat/android-image-filter/build/res/rs/release" />
-        <source path="/Users/suresh/Documents/odesk/SnapChat/android-image-filter/build/res/generated/release" />
+        <source path="/Users/suresh/Documents/odesk/odesk-snap/SnapChat/android-image-filter/build/res/rs/release" />
+        <source path="/Users/suresh/Documents/odesk/odesk-snap/SnapChat/android-image-filter/build/res/generated/release" />
     </dataSet>
     <dataSet config="release" >
-        <source path="/Users/suresh/Documents/odesk/SnapChat/android-image-filter/src/release/res" />
+        <source path="/Users/suresh/Documents/odesk/odesk-snap/SnapChat/android-image-filter/src/release/res" />
     </dataSet>
 
 </merger>

@@ -2,10 +2,10 @@
 <merger>
 
     <dataSet config="main" >
-        <source path="/Users/suresh/Documents/odesk/SnapChat/android-image-filter/src/main/assets" />
+        <source path="/Users/suresh/Documents/odesk/odesk-snap/SnapChat/android-image-filter/src/main/assets" />
     </dataSet>
     <dataSet config="debug" >
-        <source path="/Users/suresh/Documents/odesk/SnapChat/android-image-filter/src/debug/assets" />
+        <source path="/Users/suresh/Documents/odesk/odesk-snap/SnapChat/android-image-filter/src/debug/assets" />
     </dataSet>
 
 </merger>

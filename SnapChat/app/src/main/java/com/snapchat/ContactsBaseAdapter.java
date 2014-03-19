@@ -1,16 +1,11 @@
 package com.snapchat;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import org.apache.commons.lang.WordUtils;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -68,7 +63,7 @@ public class ContactsBaseAdapter extends BaseAdapter implements Filterable {
             txtName = (TextView) holder.findViewById(R.id.contacts_item_text);
             txtName.setTextSize((float) (Height * 0.0296));
             txtName.setTextColor(Color.parseColor("#333333"));
-            txtName.setTypeface(Inbox_Activity.type1);
+            txtName.setTypeface(InboxActivity.type1);
             if (txtName != null)
                 txtName.setText(WordUtils.capitalize(Friends.get(position).USER_NAME));
 

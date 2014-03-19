@@ -4,10 +4,8 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.app.Activity;
-import android.app.Notification;
 import android.content.Context;
 import android.content.Intent;
-import android.inputmethodservice.Keyboard;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -241,10 +239,10 @@ public class LoginActivity extends Activity {
         private void handleLoginSuccess(JSONObject loginResponse) {
             try {
                 AppStorage.getInstance(getApplicationContext()).setUserLoggedIn(true);
+                AppStorage.getInstance(getApplicationContext()).saveLoginObject(loginResponse.toString());
                 AppStorage.getInstance(getApplicationContext()).saveAuthToken(loginResponse.getString(Snapchat.AUTH_TOKEN_KEY));
                 finish();
-                Intent intent = new Intent(LoginActivity.this, Inbox_Activity.class);
-                intent.putExtra(MainActivity.EXTRA_LOGIN_RESPONSE, loginResponse.toString());
+                Intent intent = new Intent(LoginActivity.this, InboxActivity.class);
                 startActivity(intent);
             } catch (Exception ex) {
                 handleLoginFailure(getString(R.string.error_in_communication));
