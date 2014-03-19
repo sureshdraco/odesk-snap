@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="JavaSnap-1.1-SNAPSHOT-withDependency-ShadedForAndroid">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/app/libs/JavaSnap-1.1-SNAPSHOT-withDependency-ShadedForAndroid.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

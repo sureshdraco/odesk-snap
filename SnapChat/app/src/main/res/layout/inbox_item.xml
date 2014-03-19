@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <RelativeLayout 
+        android:id="@+id/item_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/white"
+        android:layout_alignParentTop="true">
+
+        <ImageView
+	        android:id="@+id/item_image"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_alignParentLeft="true"
+	        android:layout_centerVertical="true"
+	        android:layout_marginLeft="15dp"/>
+	
+		    <LinearLayout
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:layout_centerVertical="true"
+		        android:layout_marginLeft="15dp"
+		        android:layout_toRightOf="@+id/item_image"
+		        android:orientation="vertical" >
+		
+		        <TextView
+		            android:id="@+id/item_text1"
+		            android:layout_width="wrap_content"
+		            android:layout_height="wrap_content"
+		            android:text="Large Text"
+		            android:gravity="left"
+		            android:paddingLeft="5dp"
+		            android:paddingTop="5dp"
+		            android:textColor="@android:color/black"
+		            android:textAppearance="?android:attr/textAppearanceLarge" />
+		
+		        <TextView
+		            android:id="@+id/item_text2"
+		            android:layout_width="wrap_content"
+		            android:layout_height="wrap_content"
+		            android:gravity="left"
+		            android:text="Medium Text"
+					android:paddingLeft="5dp"
+		            android:paddingBottom="5dp"
+		            android:textColor="@android:color/black"
+		            android:textAppearance="?android:attr/textAppearanceMedium" />
+		        
+		    </LinearLayout>
+        
+        
+    </RelativeLayout>
+    
+<!--     <View  -->
+<!--         android:layout_width="match_parent" -->
+<!--         android:layout_height="5px" -->
+<!--         android:background="#f2d31c" -->
+<!--         android:layout_below="@+id/item_layout"/> -->
+    
+</RelativeLayout>
