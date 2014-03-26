@@ -2,8 +2,11 @@
 <project version="4">
   <component name="EclipseCodeFormatter">
     <option name="defaultSettings" value="true" />
-    <option name="id" value="1376904759272" />
+    <option name="formatter" value="ECLIPSE" />
+    <option name="id" value="1375892912803" />
     <option name="name" value="default" />
+    <option name="pathToConfigFileJava" value="D:/rebtel_eclipse_formatter.xml" />
+    <option name="selectedJavaProfile" value="Rebtel Java Formatter" />
   </component>
   <component name="EntryPointsManager">
     <entry_points version="2.0" />

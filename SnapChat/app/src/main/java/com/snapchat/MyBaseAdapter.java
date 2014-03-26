@@ -57,16 +57,13 @@ public class MyBaseAdapter extends BaseAdapter {
         try {
             return Array.getJSONObject(position);
         } catch (JSONException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
             return null;
         }
-        // TODO Auto-generated method stub
     }
 
     @Override
     public long getItemId(int position) {
-        // TODO Auto-generated method stub
         return position;
     }
 

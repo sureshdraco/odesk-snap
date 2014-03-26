@@ -50,7 +50,7 @@ public class AppStorage {
 
     public JSONObject getLoginObject() {
         try {
-            JSONObject jsonObject = new JSONObject(sharedPreferences.getString(AUTH_TOKEN, ""));
+            JSONObject jsonObject = new JSONObject(sharedPreferences.getString(LOGIN_OBJECT, ""));
             return jsonObject;
         } catch (JSONException e) {
             e.printStackTrace();
