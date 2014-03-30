@@ -41,10 +41,11 @@ android {
 }
 
 dependencies {
+    compile 'com.android.support:appcompat-v7:19.0.+'
     compile project(':android-image-filter')
     compile('de.keyboardsurfer.android.widget:crouton:1.8.3') {
         exclude group: 'com.google.android', module: 'support-v4'
     }
-    compile 'com.android.support:appcompat-v7:19.0.+'
+    
     compile fileTree(dir: 'libs', include: '*.jar')
 }

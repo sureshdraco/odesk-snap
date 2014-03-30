@@ -21,8 +21,12 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.v4.view.MotionEventCompat;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
@@ -42,6 +46,7 @@ import com.appcelerator.cloud.sdk.CocoafishError;
 import com.habosa.javasnap.Snap;
 import com.habosa.javasnap.Snapchat;
 import com.snapchat.util.AppStorage;
+import com.snapchat.util.OnSwipeTouchListener;
 
 public class InboxActivity extends Activity {
 
@@ -65,7 +70,20 @@ public class InboxActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_inbox);
         listView = (ListView) findViewById(R.id.inbox_listview);
+        listView.setOnTouchListener(new OnSwipeTouchListener(this) {
+            public void onSwipeTop() {
+            }
 
+            public void onSwipeRight() {
+            }
+
+            public void onSwipeLeft() {
+                Toast.makeText(InboxActivity.this, "left", Toast.LENGTH_SHORT).show();
+            }
+
+            public void onSwipeBottom() {
+            }
+        });
         type1 = Typeface.createFromAsset(getAssets(), "KozGoPro-Light.otf");
         type2 = Typeface.createFromAsset(getAssets(), "KozGoPro-Medium.otf");
 
@@ -85,13 +103,7 @@ public class InboxActivity extends Activity {
 
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "Snap" + ".jpg");
-                mUri = Uri.fromFile(file);
-                Log.v("Path", "" + file.toString());
-                intent.putExtra(MediaStore.EXTRA_OUTPUT, mUri);
-                intent.putExtra("return-data", true);
-                startActivityForResult(intent, 1);
+                gotoCameraActivity();
             }
         });
 
@@ -105,7 +117,7 @@ public class InboxActivity extends Activity {
 
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(InboxActivity.this, ContactsActivity.class));
+                gotoActivity(ContactsActivity.class);
             }
         });
 
@@ -144,6 +156,35 @@ public class InboxActivity extends Activity {
             }
         };
         showChats();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        super.onCreateOptionsMenu(menu);
+        getMenuInflater().inflate(R.menu.settings, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if(item.getItemId() == R.id.action_settings) {
+            gotoActivity(SettingsActivity.class);
+        }
+        return false;
+    }
+
+    private void gotoActivity(Class activityClass) {
+        startActivity(new Intent(this, activityClass));
+    }
+
+    private void gotoCameraActivity() {
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "Snap" + ".jpg");
+        mUri = Uri.fromFile(file);
+        Log.v("Path", "" + file.toString());
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, mUri);
+        intent.putExtra("return-data", true);
+        startActivityForResult(intent, 1);
     }
 
     //
@@ -270,6 +311,27 @@ public class InboxActivity extends Activity {
             }
         });
 
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+
+        int action = MotionEventCompat.getActionMasked(event);
+
+        switch (action) {
+            case (MotionEvent.ACTION_DOWN):
+                return true;
+            case (MotionEvent.ACTION_MOVE):
+                return true;
+            case (MotionEvent.ACTION_UP):
+                return true;
+            case (MotionEvent.ACTION_CANCEL):
+                return true;
+            case (MotionEvent.ACTION_OUTSIDE):
+                return true;
+            default:
+                return super.onTouchEvent(event);
+        }
     }
 
 }

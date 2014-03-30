@@ -1,5 +1,6 @@
 package com.snapchat;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -26,7 +27,7 @@ public class InboxArrayAdapter extends ArrayAdapter<Snap> {
 
     private ArrayList<Snap> snapList = new ArrayList<Snap>();
     private Context context;
-
+    SimpleDateFormat dateFormat = new SimpleDateFormat("MMM dd, yyyy");
 
     public InboxArrayAdapter(Context context, ArrayList<Snap> snapList) {
         super(context, R.layout.inbox_item, snapList);
@@ -48,16 +49,24 @@ public class InboxArrayAdapter extends ArrayAdapter<Snap> {
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
         }
-
+        String additionalText = "";
         Snap snap = snapList.get(position);
         if (snap.isIncoming()) {
             viewHolder.txtName.setText(snap.getSender());
             viewHolder.imageView.setImageDrawable(context.getResources().getDrawable(R.drawable.inbox_received));
+            if(snap.isViewed()) {
+                additionalText = " - Double tap to reply";
+            } else {
+                additionalText = " - Press and hold to view";
+            }
         } else {
             viewHolder.imageView.setImageDrawable(context.getResources().getDrawable(R.drawable.inbox_senticon));
             viewHolder.txtName.setText(snap.getRecipient());
+            if(snap.isViewed()) {
+                additionalText = " - Opened";
+            }
         }
-        viewHolder.time.setText(new Date(snap.getTimeStamp()).toString());
+        viewHolder.time.setText(dateFormat.format(new Date(snap.getTimeStamp())) + additionalText);
         return convertView;
     }
 

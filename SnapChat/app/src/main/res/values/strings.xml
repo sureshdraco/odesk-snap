@@ -12,5 +12,6 @@
     <string name="login_btn">login_btn</string>
     <string name="login">Login</string>
     <string name="register">Register</string>
+    <string name="title_activity_settings">SettingsActivity</string>
 
 </resources>

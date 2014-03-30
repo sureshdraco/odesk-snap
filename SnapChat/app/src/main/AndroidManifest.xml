@@ -3,53 +3,57 @@
     package="com.snapchat">
 
     <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:allowBackup="true"
         android:icon="@drawable/appicon"
         android:label="@string/app_name"
         android:theme="@style/AppTheme">
         <activity
-            android:screenOrientation="portrait"
             android:name="com.snapchat.LoginActivity"
             android:label="@string/title_activity_login"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize|stateVisible" />
         <activity
-            android:screenOrientation="portrait"
             android:name="com.snapchat.RegisterAndLoginActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/NoTitleBar" />
         <activity
-            android:screenOrientation="portrait"
-            android:noHistory="true"
             android:name="com.snapchat.MainActivity"
-            android:label="@string/title_activity_main" />
+            android:label="@string/title_activity_main"
+            android:noHistory="true"
+            android:screenOrientation="portrait" />
         <activity
-            android:screenOrientation="portrait"
             android:name="com.snapchat.SplashActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/NoTitleBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
-            android:name=".InboxActivity"
-            android:screenOrientation="portrait" />
-
+            android:name="com.snapchat.InboxActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/NoTitleBar" />
         <activity
             android:name="com.snapchat.PaintActivity"
             android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen" />
+            android:theme="@style/Fullscreen" />
         <activity
             android:name="com.snapchat.ContactsActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden"
-            android:theme="@android:style/Theme.Black.NoTitleBar" />
+            android:theme="@style/NoTitleBar"
+            android:windowSoftInputMode="stateHidden" />
         <activity
             android:name="com.snapchat.ImageDisplay"
             android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen" />
-
+            android:theme="@style/NoTitleBar" />
+        <activity
+            android:name="com.snapchat.SettingsActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/NoTitleBar" />
     </application>
 
 </manifest>

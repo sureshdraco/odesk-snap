@@ -13,6 +13,11 @@ public class AppStorage {
     private static final String AUTH_TOKEN = "authToken";
     private static final String IS_USER_LOGGED_IN = "isUserLoggedIn";
     private static final String LOGIN_OBJECT = "loginObject";
+    private static final String USERNAME = "username";
+    private static final String EMAIL = "email";
+    private static final String BIRTHDAY = "birthday";
+    private static final String PHONENUMBER = "phonenumber";
+
     private static AppStorage appStorage;
     private final SharedPreferences sharedPreferences;
 
@@ -28,8 +33,17 @@ public class AppStorage {
         return appStorage;
     }
 
-    public void saveAuthToken(String authToken) {
-        sharedPreferences.edit().putString(AUTH_TOKEN, authToken).commit();
+    public void saveAuthToken(String username) {
+        sharedPreferences.edit().putString(AUTH_TOKEN, username).commit();
+    }
+
+    public String getUsername() {
+        return sharedPreferences.getString(USERNAME, "");
+    }
+
+
+    public void saveUsername(String authToken) {
+        sharedPreferences.edit().putString(USERNAME, authToken).commit();
     }
 
     public String getAuthToken() {
@@ -58,4 +72,39 @@ public class AppStorage {
         return null;
     }
 
+
+    public void saveEmail(String email) {
+        sharedPreferences.edit().putString(EMAIL, email).commit();
+    }
+
+    public String getEmail() {
+        return sharedPreferences.getString(EMAIL, "");
+    }
+
+
+    public void saveBirthday(String birthday) {
+        sharedPreferences.edit().putString(BIRTHDAY, birthday).commit();
+    }
+
+    public String getBirthday() {
+        return sharedPreferences.getString(BIRTHDAY, "");
+    }
+
+
+    public void savePhoneNumber(String phoneNumber) {
+        sharedPreferences.edit().putString(PHONENUMBER, phoneNumber).commit();
+    }
+
+    public String getPhoneNumber() {
+        return sharedPreferences.getString(PHONENUMBER, "");
+    }
+
+    public void clearUserData() {
+        sharedPreferences.edit().putString(PHONENUMBER, "").commit();
+        sharedPreferences.edit().putString(USERNAME, "").commit();
+        sharedPreferences.edit().putString(LOGIN_OBJECT, "").commit();
+        sharedPreferences.edit().putString(EMAIL, "").commit();
+        sharedPreferences.edit().putString(BIRTHDAY, "").commit();
+        sharedPreferences.edit().putString(AUTH_TOKEN, "").commit();
+    }
 }

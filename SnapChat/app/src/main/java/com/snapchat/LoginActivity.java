@@ -224,6 +224,12 @@ public class LoginActivity extends Activity {
             try {
                 AppStorage.getInstance(getApplicationContext()).setUserLoggedIn(true);
                 AppStorage.getInstance(getApplicationContext()).saveLoginObject(loginResponse.toString());
+
+                AppStorage.getInstance(getApplicationContext()).saveUsername(loginResponse.getString(Snapchat.USERNAME_KEY));
+                AppStorage.getInstance(getApplicationContext()).saveEmail(loginResponse.getString(Snapchat.EMAIL_KEY));
+                AppStorage.getInstance(getApplicationContext()).savePhoneNumber(loginResponse.getString("snapchat_phone_number"));
+                AppStorage.getInstance(getApplicationContext()).saveBirthday(loginResponse.getString(Snapchat.BIRTHDAY_KEY));
+
                 AppStorage.getInstance(getApplicationContext()).saveAuthToken(loginResponse.getString(Snapchat.AUTH_TOKEN_KEY));
                 finish();
                 Intent intent = new Intent(LoginActivity.this, InboxActivity.class);
