@@ -8,9 +8,9 @@
         <option name="gradleHome" value="$USER_HOME$/Downloads/gradle-1.10" />
         <option name="modules">
           <set>
-            <option value="D:\New folder (2)\SnapChat" />
-            <option value="D:\New folder (2)\SnapChat\android-image-filter" />
-            <option value="D:\New folder (2)\SnapChat\app" />
+            <option value="$PROJECT_DIR$" />
+            <option value="$PROJECT_DIR$/android-image-filter" />
+            <option value="$PROJECT_DIR$/app" />
           </set>
         </option>
       </GradleProjectSettings>

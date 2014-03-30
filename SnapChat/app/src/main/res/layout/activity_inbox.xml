@@ -2,43 +2,40 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/INbox_mainlayout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" 
+    android:layout_height="match_parent"
     android:background="@drawable/inbox_bg">
-    
-	<RelativeLayout 
-	    android:id="@+id/inbox_topbar"
-	    android:layout_width="match_parent"
-	    android:layout_height="wrap_content"
-	    android:background="@drawable/inbox_header"
-	    android:layout_alignParentTop="true">
 
-		<ImageButton
-		    android:id="@+id/inbox_camera"
-		    android:layout_width="wrap_content"
-		    android:layout_height="wrap_content"
-		    android:layout_alignParentLeft="true"
-		    android:layout_centerVertical="true"
-		    android:background="@drawable/inbox_camera_selector" />
+    <RelativeLayout
+        android:id="@+id/inbox_topbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/inbox_header"
+        android:layout_alignParentTop="true">
 
-		<ImageButton
-		    android:id="@+id/inbox_setting"
-		    android:layout_width="wrap_content"
-		    android:layout_height="wrap_content"
-		    android:layout_alignParentRight="true"
-			android:layout_centerVertical="true"
-		    android:background="@drawable/inbox_settings_selector" />
-	    
-	</RelativeLayout>
-	
-	<ListView 
-	    android:id="@+id/inbox_listview"
-	    android:layout_width="match_parent"
-	    android:layout_height="wrap_content"
-	    android:divider="#f2d31c"
-    	android:dividerHeight="5px"
-	    android:background="@android:color/white"
-	    android:layout_below="@+id/inbox_topbar">
-	    
-	</ListView>
-    
+        <ImageButton
+            android:id="@+id/inbox_camera"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:background="@drawable/inbox_camera_selector" />
+
+        <ImageButton
+            android:id="@+id/inbox_setting"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:background="@drawable/inbox_settings_selector" />
+    </RelativeLayout>
+
+    <ListView
+        android:id="@+id/inbox_listview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:divider="#f2d31c"
+        android:dividerHeight="5px"
+        android:listSelector="@drawable/inbox_item_selector"
+        android:layout_below="@+id/inbox_topbar" />
+
 </RelativeLayout>

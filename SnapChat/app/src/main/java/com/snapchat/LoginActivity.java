@@ -32,20 +32,6 @@ import de.keyboardsurfer.android.widget.crouton.Style;
  */
 public class LoginActivity extends Activity {
     /**
-     * A dummy authentication store containing known user names and passwords.
-     * TODO: remove after connecting to a real authentication system.
-     */
-    private static final String[] DUMMY_CREDENTIALS = new String[]{
-            "foo@example.com:hello",
-            "bar@example.com:world"
-    };
-
-    /**
-     * The default email to populate the email field with.
-     */
-    public static final String EXTRA_EMAIL = "com.example.android.authenticatordemo.extra.EMAIL";
-
-    /**
      * Keep track of the login task to ensure we can cancel it if requested.
      */
     private UserLoginTask mAuthTask = null;
@@ -67,8 +53,6 @@ public class LoginActivity extends Activity {
 
         setContentView(R.layout.activity_login);
 
-        // Set up the login form.
-        mUsername = getIntent().getStringExtra(EXTRA_EMAIL);
         mUsernameView = (EditText) findViewById(R.id.username);
         mUsernameView.setText(mUsername);
 
@@ -208,7 +192,7 @@ public class LoginActivity extends Activity {
         @Override
         protected JSONObject doInBackground(Void... params) {
             try {
-                return new JSONObject(Snapchat.login(mUsername, mPassword));
+                return Snapchat.login(mUsername, mPassword);
             } catch (Exception ignored) {
             }
             return null;

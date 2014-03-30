@@ -34,8 +34,7 @@
 
         <activity
             android:name=".InboxActivity"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen" />
+            android:screenOrientation="portrait" />
 
         <activity
             android:name="com.snapchat.PaintActivity"
@@ -44,7 +43,8 @@
         <activity
             android:name="com.snapchat.ContactsActivity"
             android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen" />
+            android:windowSoftInputMode="stateHidden"
+            android:theme="@android:style/Theme.Black.NoTitleBar" />
         <activity
             android:name="com.snapchat.ImageDisplay"
             android:screenOrientation="portrait"

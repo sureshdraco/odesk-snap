@@ -9,7 +9,7 @@ import com.snapchat.util.AppStorage;
 
 public class SplashActivity extends Activity {
 
-    private long delayMillis = 3000;
+    private long delayMillis = 500;
     private String TAG = SplashActivity.class.getSimpleName();
 
     @Override
