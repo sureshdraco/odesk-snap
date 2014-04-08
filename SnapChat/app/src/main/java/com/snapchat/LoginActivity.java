@@ -4,6 +4,8 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -19,9 +21,13 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.habosa.javasnap.Snapchat;
+import com.snapchat.service.MyScheduleReceiver;
+import com.snapchat.service.MyStartServiceReceiver;
 import com.snapchat.util.AppStorage;
 
 import org.json.JSONObject;
+
+import java.util.Calendar;
 
 import de.keyboardsurfer.android.widget.crouton.Crouton;
 import de.keyboardsurfer.android.widget.crouton.Style;
@@ -222,8 +228,10 @@ public class LoginActivity extends Activity {
 
         private void handleLoginSuccess(JSONObject loginResponse) {
             try {
+                startRepeatingService(getApplicationContext());
                 AppStorage.getInstance(getApplicationContext()).setUserLoggedIn(true);
                 AppStorage.getInstance(getApplicationContext()).saveLoginObject(loginResponse.toString());
+                AppStorage.getInstance(getApplicationContext()).savePassword(mPassword);
 
                 AppStorage.getInstance(getApplicationContext()).saveUsername(loginResponse.getString(Snapchat.USERNAME_KEY));
                 AppStorage.getInstance(getApplicationContext()).saveEmail(loginResponse.getString(Snapchat.EMAIL_KEY));
@@ -244,6 +252,21 @@ public class LoginActivity extends Activity {
             mAuthTask = null;
             showProgress(false);
         }
+    }
+
+    private void startRepeatingService(Context context) {
+        AlarmManager service = (AlarmManager) context
+                .getSystemService(Context.ALARM_SERVICE);
+        Intent i = new Intent(context, MyStartServiceReceiver.class);
+        PendingIntent pending = PendingIntent.getBroadcast(context, 0, i,
+                PendingIntent.FLAG_CANCEL_CURRENT);
+        Calendar cal = Calendar.getInstance();
+        // start 30 seconds after boot completed
+        cal.add(Calendar.SECOND, 30);
+        // fetch every 30 seconds
+        // InexactRepeating allows Android to optimize the energy consumption
+        service.setInexactRepeating(AlarmManager.RTC_WAKEUP,
+                cal.getTimeInMillis(), MyScheduleReceiver.REPEAT_TIME, pending);
     }
 
     @Override

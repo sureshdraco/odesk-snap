@@ -14,11 +14,15 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.habosa.javasnap.Snapchat;
+import com.snapchat.util.AppStorage;
+
 public class ImageDisplay extends Activity {
 
     ImageView image;
     TextView text;
     CountDownTimer timer;
+    int time;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,10 +30,12 @@ public class ImageDisplay extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_imagedisplay);
 
-        String url = "";
+        String snapId = "";
+        time = 5;
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
-            url = extras.getString("url");
+            snapId = extras.getString("snapId");
+            time = extras.getInt("time");
         }
         image = (ImageView) findViewById(R.id.display_image);
         text = (TextView) findViewById(R.id.text_Timer);
@@ -41,7 +47,7 @@ public class ImageDisplay extends Activity {
         dialog.setCancelable(false);
         dialog.setMessage("Loading Image");
         DownloadImage task = new DownloadImage(dialog, ImageDisplay.this);
-        task.execute(url);
+        task.execute(snapId);
     }
 
     public void Set_image(Bitmap bitmap) {
@@ -49,7 +55,7 @@ public class ImageDisplay extends Activity {
         image.setImageBitmap(bitmap);
 
         InboxActivity.timer.start();
-        timer = new CountDownTimer(10000, 100) {
+        timer = new CountDownTimer(time * 1000, 100) {
             int secondsLeft = 0;
 
             public void onTick(long ms) {
@@ -87,16 +93,14 @@ class DownloadImage extends AsyncTask<String, Void, Bitmap> {
     }
 
     @Override
-    protected Bitmap doInBackground(String... URL) {
+    protected Bitmap doInBackground(String... snapId) {
 
-        String imageURL = URL[0];
+        String imageSnapId = snapId[0];
+        byte[] imageBytes = Snapchat.getSnap(imageSnapId, AppStorage.getInstance(Idisplay).getUsername(), AppStorage.getInstance(Idisplay).getAuthToken());
 
         Bitmap bitmap = null;
         try {
-            // Download Image from URL
-            InputStream input = new java.net.URL(imageURL).openStream();
-            // Decode Bitmap
-            bitmap = BitmapFactory.decodeStream(input);
+            bitmap = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length);
         } catch (Exception e) {
             e.printStackTrace();
         }

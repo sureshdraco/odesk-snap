@@ -3,12 +3,22 @@
     package="com.snapchat">
 
     <uses-permission android:name="android.permission.INTERNET" />
-
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-feature android:name="android.hardware.camera"
+        android:required="true" />
     <application
+        android:name=".SnapchatApplication"
         android:allowBackup="true"
         android:icon="@drawable/appicon"
         android:label="@string/app_name"
         android:theme="@style/AppTheme">
+        <receiver android:name="com.snapchat.service.MyScheduleReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+        <receiver android:name="com.snapchat.service.MyStartServiceReceiver" />
+
         <activity
             android:name="com.snapchat.LoginActivity"
             android:label="@string/title_activity_login"
@@ -40,7 +50,7 @@
         <activity
             android:name="com.snapchat.PaintActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/Fullscreen" />
+            android:theme="@style/NoTitleBar" />
         <activity
             android:name="com.snapchat.ContactsActivity"
             android:screenOrientation="portrait"
@@ -54,6 +64,8 @@
             android:name="com.snapchat.SettingsActivity"
             android:screenOrientation="portrait"
             android:theme="@style/NoTitleBar" />
+
+        <service android:name="com.snapchat.service.SnapchatInboxService" />
     </application>
 
 </manifest>

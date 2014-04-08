@@ -21,6 +21,7 @@
     </style>
 
     <style name="Fullscreen">
+        <item name="android:windowNoTitle">true</item>
         <item name="android:windowFullscreen">true</item>
         <item name="android:windowContentOverlay">@null</item>
     </style>

@@ -1,8 +1,11 @@
 package com.snapchat;
 
 import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -14,6 +17,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -25,8 +29,10 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import com.habosa.javasnap.Friend;
+import com.habosa.javasnap.Snap;
 import com.habosa.javasnap.Snapchat;
 import com.snapchat.util.AppStorage;
 
@@ -38,12 +44,17 @@ public class ContactsActivity extends Activity {
     ArrayList<Friend> friendList = new ArrayList<Friend>();
     ListView list;
     ContactsArrayAdapter adapter;
+    String path, mCurrentPhotoPath;
+    private Uri mUri;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_contacts);
-
+        if (getIntent() != null && getIntent().getExtras() != null) {
+            path = getIntent().getExtras().getString("path");
+        }
         getWindowManager().getDefaultDisplay().getMetrics(metrics);
         width = metrics.widthPixels;
         height = metrics.heightPixels;
@@ -70,6 +81,7 @@ public class ContactsActivity extends Activity {
 
             @Override
             public void onClick(View v) {
+                gotoCameraActivity();
             }
         });
 
@@ -83,13 +95,6 @@ public class ContactsActivity extends Activity {
 
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "Snap" + ".jpg");
-                Uri mUri = Uri.fromFile(file);
-                Log.v("Path", "" + file.toString());
-                intent.putExtra(MediaStore.EXTRA_OUTPUT, mUri);
-                intent.putExtra("return-data", true);
-                startActivityForResult(intent, 1);
             }
         });
 
@@ -102,7 +107,12 @@ public class ContactsActivity extends Activity {
             @Override
             public void onItemClick(AdapterView<?> arg0, View view, int position,
                                     long arg3) {
-
+                if (!TextUtils.isEmpty(path)) {
+                    ProgressDialog dialog = new ProgressDialog(ContactsActivity.this);
+                    dialog.setMessage("Getting Friends");
+                    dialog.setCancelable(false);
+                    new AsyncTask_SendSnap(dialog, ContactsActivity.this, friendList.get(position).getUsername()).execute();
+                }
             }
 
         });
@@ -129,6 +139,52 @@ public class ContactsActivity extends Activity {
             }
         });
 
+    }
+
+
+    private void gotoCameraActivity() {
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        try {
+            File file = createImageFile();
+            if (file != null) {
+                mUri = Uri.fromFile(file);
+                path = file.getAbsolutePath();
+                Log.v("Path", "" + file.toString());
+                intent.putExtra(MediaStore.EXTRA_OUTPUT, mUri);
+                startActivityForResult(intent, 1);
+            }
+        } catch (Exception ignored) {
+        }
+    }
+
+    private File createImageFile() throws IOException {
+        // Create an image file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "JPEG_" + timeStamp + "_";
+        File storageDir = Environment.getExternalStoragePublicDirectory(
+                Environment.DIRECTORY_PICTURES);
+        File image = File.createTempFile(
+                imageFileName,  /* prefix */
+                ".jpg",         /* suffix */
+                storageDir      /* directory */
+        );
+
+        // Save a file: path for use with ACTION_VIEW intents
+        mCurrentPhotoPath = "file://" + image.getAbsolutePath();
+        return image;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1) {
+            if (resultCode == RESULT_OK) {
+                Log.e("FilePath", "" + path);
+                Intent intent = new Intent(ContactsActivity.this, PaintActivity.class);
+                intent.putExtra("filepath", mCurrentPhotoPath);
+                startActivity(intent);
+            }
+        }
     }
 
     public ArrayList<Friend> getFriends() {
@@ -176,6 +232,52 @@ public class ContactsActivity extends Activity {
             if (ID == 1) {
                 Login.show();
             }
+            P_Dialog.dismiss();
+        }
+    }
+
+
+    class AsyncTask_SendSnap extends AsyncTask<String, String, Boolean> {
+
+        ProgressDialog P_Dialog;
+        ContactsActivity contactsActivity;
+        String recepientUsername;
+
+        public AsyncTask_SendSnap(ProgressDialog dialog, ContactsActivity contactsActivity, String recepientUsername) {
+            P_Dialog = dialog;
+            this.contactsActivity = contactsActivity;
+            this.recepientUsername = recepientUsername;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            P_Dialog.show();
+        }
+
+        @Override
+        protected Boolean doInBackground(String... params) {
+            File imageFile = new File(path);
+            boolean isSent = false;
+            String id = "";
+            try {
+                id = Snapchat.upload(imageFile, AppStorage.getInstance(getApplicationContext()).getUsername(), AppStorage.getInstance(getApplicationContext()).getAuthToken());
+                if (id == null) {
+                    isSent = false;
+                } else {
+                    ArrayList<String> recepientList = new ArrayList<String>();
+                    isSent = Snapchat.send(id, recepientList, false, 5, AppStorage.getInstance(getApplicationContext()).getUsername(), AppStorage.getInstance(getApplicationContext()).getAuthToken());
+                }
+            } catch (Exception ignored) {
+
+            }
+            return isSent;
+        }
+
+        @Override
+        protected void onPostExecute(Boolean isSent) {
+            super.onPostExecute(isSent);
+            Toast.makeText(getApplicationContext(), isSent ? "Snap sent" : "Sending failed", Toast.LENGTH_LONG).show();
             P_Dialog.dismiss();
         }
     }

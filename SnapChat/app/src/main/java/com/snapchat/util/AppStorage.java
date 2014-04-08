@@ -17,6 +17,7 @@ public class AppStorage {
     private static final String EMAIL = "email";
     private static final String BIRTHDAY = "birthday";
     private static final String PHONENUMBER = "phonenumber";
+    private static final String PASSWORD = "password";
 
     private static AppStorage appStorage;
     private final SharedPreferences sharedPreferences;
@@ -107,4 +108,13 @@ public class AppStorage {
         sharedPreferences.edit().putString(BIRTHDAY, "").commit();
         sharedPreferences.edit().putString(AUTH_TOKEN, "").commit();
     }
+
+    public void savePassword(String password) {
+        sharedPreferences.edit().putString(PASSWORD, password).commit();
+    }
+
+    public String getPassword() {
+        return sharedPreferences.getString(PASSWORD, "");
+    }
+
 }

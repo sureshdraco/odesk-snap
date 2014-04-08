@@ -21,12 +21,21 @@
             android:background="@drawable/inbox_camera_selector" />
 
         <ImageButton
-            android:id="@+id/inbox_setting"
+            android:id="@+id/inbox_contact"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:background="@drawable/contact" />
+
+        <ImageButton
+            android:id="@+id/inbox_setting"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toLeftOf="@+id/inbox_contact"
+            android:layout_marginRight="7dp"
+            android:layout_centerVertical="true"
+            android:background="@drawable/inbox_setting" />
     </RelativeLayout>
 
     <ListView

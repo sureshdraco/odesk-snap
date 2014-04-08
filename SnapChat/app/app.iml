@@ -80,6 +80,7 @@
     <orderEntry type="library" exported="" name="commons-lang-2.6" level="project" />
     <orderEntry type="library" exported="" name="commons-lang3-3.2.1" level="project" />
     <orderEntry type="library" exported="" name="support-v4-19.0.1" level="project" />
+    <orderEntry type="library" exported="" name="universal-image-loader-1.9.1" level="project" />
     <orderEntry type="library" exported="" name="crouton-1.8.3" level="project" />
     <orderEntry type="module" module-name="android-image-filter" exported="" />
   </component>

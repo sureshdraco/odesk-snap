@@ -51,7 +51,11 @@ public class ContactsArrayAdapter extends ArrayAdapter<Friend> implements Filter
         }
         Friend friend = friendsList.get(position);
         if (friend != null) {
-            viewHolder.txtName.setText(friend.getDisplayName());
+            if(TextUtils.isEmpty(friend.getDisplayName())) {
+                viewHolder.txtName.setText(friend.getUsername());
+            } else {
+                viewHolder.txtName.setText(friend.getDisplayName());
+            }
             viewHolder.txtName.setTextColor(Color.parseColor("#333333"));
             viewHolder.txtName.setTypeface(InboxActivity.type1);
 

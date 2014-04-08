@@ -6,11 +6,10 @@
     
 	<ImageView 
 	    android:id="@+id/paint_image"
-	    android:layout_width="match_parent"
-	    android:layout_height="match_parent"
-	    android:layout_centerInParent="true"
-	    android:background="@android:color/white"
-	    android:scaleType="fitXY"/>
+	    android:layout_width="fill_parent"
+	    android:layout_height="fill_parent"
+	    android:scaleType="centerInside"
+        android:background="@android:color/white"/>
 
 	<RelativeLayout 
 	    android:id="@+id/paint_editing_layout"

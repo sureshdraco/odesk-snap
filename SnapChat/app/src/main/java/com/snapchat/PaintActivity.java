@@ -5,17 +5,22 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.Date;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
+import android.provider.MediaStore;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
@@ -27,6 +32,12 @@ import android.widget.Toast;
 import android.widget.RelativeLayout.LayoutParams;
 import android.widget.SlidingDrawer;
 import android.widget.SlidingDrawer.OnDrawerOpenListener;
+
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.assist.FailReason;
+import com.nostra13.universalimageloader.core.assist.ImageLoadingListener;
+import com.nostra13.universalimageloader.core.assist.ImageSize;
+import com.snapchat.util.AppStorage;
 
 import cn.Ragnarok.BitmapFilter;
 
@@ -43,6 +54,54 @@ public class PaintActivity extends Activity {
     RelativeLayout editing, panel_layout;
     RelativeLayout main;
     File output;
+    private String outputImagePath;
+
+    private void setPic() {
+        ImageSize imageSize = new ImageSize(image.getWidth(), image.getHeight());
+        ImageLoader.getInstance().loadImage(path, imageSize, new ImageLoadingListener() {
+            @Override
+            public void onLoadingStarted(String s, View view) {
+                Log.e("bitmap", "started");
+            }
+
+            @Override
+            public void onLoadingFailed(String s, View view, FailReason failReason) {
+                Log.e("bitmap", failReason.toString());
+            }
+
+            @Override
+            public void onLoadingComplete(String s, View view, Bitmap bitmap) {
+                int maxSize = 2048;
+                int height = 0;
+                int width = 0;
+                int inHeight = bitmap.getHeight();
+                int inWidth = bitmap.getWidth();
+                if (inWidth > inHeight) { // photo is landscape
+                    height = (inHeight * maxSize) / inWidth;
+                    width = maxSize;
+                } else { // photo is portrait
+                    height = maxSize;
+                    width = (inWidth * maxSize) / inHeight;
+                }
+
+                workingBitmap = Bitmap.createScaledBitmap(bitmap, width, height, true);
+
+                image.setImageBitmap(workingBitmap);
+            }
+
+            @Override
+            public void onLoadingCancelled(String s, View view) {
+                Log.e("bitmap", "cancelled");
+            }
+        });
+    }
+
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        if (hasFocus)
+            setPic();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,9 +123,6 @@ public class PaintActivity extends Activity {
         panel_layout = (RelativeLayout) findViewById(R.id.paint_panel_layout);
 
         image = (ImageView) findViewById(R.id.paint_image);
-        workingBitmap = BitmapFactory.decodeFile(path);
-        image.setImageBitmap(workingBitmap);
-
         panel = new DrawPanel(getApplicationContext(), PaintActivity.this);
         rParams = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
         rParams.addRule(RelativeLayout.CENTER_IN_PARENT);
@@ -271,11 +327,11 @@ public class PaintActivity extends Activity {
 
             @Override
             public void onClick(View v) {
-                ((SlidingDrawer) findViewById(R.id.SlidingDrawer_buttons)).setVisibility(View.INVISIBLE);
-                ((SlidingDrawer) findViewById(R.id.SlidingDrawer_colors)).setVisibility(View.INVISIBLE);
-                ((SlidingDrawer) findViewById(R.id.SlidingDrawer_filters)).setVisibility(View.INVISIBLE);
-                ((ImageButton) findViewById(R.id.paint_delete)).setVisibility(View.INVISIBLE);
-                ((ImageButton) findViewById(R.id.paint_next)).setVisibility(View.INVISIBLE);
+//                ((SlidingDrawer) findViewById(R.id.SlidingDrawer_buttons)).setVisibility(View.INVISIBLE);
+//                ((SlidingDrawer) findViewById(R.id.SlidingDrawer_colors)).setVisibility(View.INVISIBLE);
+//                ((SlidingDrawer) findViewById(R.id.SlidingDrawer_filters)).setVisibility(View.INVISIBLE);
+//                ((ImageButton) findViewById(R.id.paint_delete)).setVisibility(View.INVISIBLE);
+//                ((ImageButton) findViewById(R.id.paint_next)).setVisibility(View.INVISIBLE);
                 ProgressDialog dialog = new ProgressDialog(PaintActivity.this);
                 dialog.setCancelable(false);
                 Aysnc_Task task = new Aysnc_Task(dialog, 0, PaintActivity.this, 2);
@@ -314,13 +370,14 @@ public class PaintActivity extends Activity {
     }
 
     public void Apply_Filter(int id) {
-        if (null != workingBitmap && !workingBitmap.isRecycled()) {
-            workingBitmap.recycle();
-            workingBitmap = null;
-//			System.gc();
-        }
-        workingBitmap = BitmapFactory.decodeFile(path);
+//        if (null != workingBitmap && !workingBitmap.isRecycled()) {
+//            workingBitmap.recycle();
+//            workingBitmap = null;
+////			System.gc();
+//        }
+//        workingBitmap = BitmapFactory.decodeFile(path);
         workingBitmap = BitmapFilter.changeStyle(workingBitmap, id);
+        Apply();
     }
 
     public void closedrawers() {
@@ -330,64 +387,42 @@ public class PaintActivity extends Activity {
 
     }
 
-    public void saveimage() {
-
-        int imageNum = 0;
+    public boolean saveimage() {
+        boolean success = false;
         File imagesFolder = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "SnapChat");
         if (!imagesFolder.exists()) {
             imagesFolder.mkdirs();
         }
-        String fileName = "SnapChatimage" + String.valueOf(imageNum) + ".jpg";
-        Bitmap bitmap1 = null;
-        output = new File(imagesFolder, fileName);
-        while (output.exists()) {
-            imageNum++;
-            fileName = "PicPlayPost image" + String.valueOf(imageNum) + ".jpg";
-            output = new File(imagesFolder, fileName);
-        }
-
-//	        if(null != bitmap1 && !bitmap1.isRecycled()){
-//				bitmap1.recycle();
-//			}
-
-        ((RelativeLayout) findViewById(R.id.paint_main)).setDrawingCacheEnabled(true);
-        ((RelativeLayout) findViewById(R.id.paint_main)).buildDrawingCache();
-
+        String fileName = "SnapChatimage" + new Date().getTime();
+        FileOutputStream out = null;
         try {
-            bitmap1 = Bitmap.createBitmap(((RelativeLayout) findViewById(R.id.paint_main)).getDrawingCache());
+            File image = File.createTempFile(fileName,".jpg", imagesFolder);
+            out = new FileOutputStream(image);
+            success = workingBitmap.compress(Bitmap.CompressFormat.PNG, 90, out);
+            outputImagePath = "file://" + image.getAbsolutePath();
+
         } catch (Exception e) {
-            Toast.makeText(getApplicationContext(), "Image too large", Toast.LENGTH_LONG).show();
-        }
-        ((RelativeLayout) findViewById(R.id.paint_main)).setDrawingCacheEnabled(false);
-
-        bitmap1 = Bitmap.createBitmap(bitmap1, 0, 0, width, height);
-        Log.e("pager", "" + bitmap1.getHeight() + bitmap1.getWidth());
-
-        OutputStream fOut = null;
-        try {
-            fOut = new FileOutputStream(output);
-            bitmap1.compress(Bitmap.CompressFormat.PNG, 100, fOut);
-            fOut.flush();
-            fOut.close();
-        } catch (FileNotFoundException e) {
             e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
+        } finally {
+            try {
+                out.close();
+            } catch (Exception ignore) {
+            }
         }
-
+        return success;
     }
 
     public void start() {
         Intent intent = new Intent(PaintActivity.this, ContactsActivity.class);
-        intent.putExtra("path", output.toString());
-        Log.e("outputfile", "11" + output.toString());
+        intent.putExtra("path", outputImagePath);
+        Log.e("outputfile", "11" + outputImagePath);
         startActivity(intent);
         finish();
     }
 
 }
 
-class Aysnc_Task extends AsyncTask<String, String, String> {
+class Aysnc_Task extends AsyncTask<String, String, Boolean> {
 
     private ProgressDialog pDialog;
     PaintActivity paint;
@@ -408,23 +443,27 @@ class Aysnc_Task extends AsyncTask<String, String, String> {
     }
 
     @Override
-    protected String doInBackground(String... params) {
+    protected Boolean doInBackground(String... params) {
         if (Func_id == 1) {
             paint.Apply_Filter(id);
         } else {
-            paint.saveimage();
+            return paint.saveimage();
         }
-        return null;
+        return false;
     }
 
     @Override
-    protected void onPostExecute(String result) {
+    protected void onPostExecute(Boolean result) {
         // TODO Auto-generated method stub
         super.onPostExecute(result);
         if (Func_id == 1) {
             paint.Apply();
         } else {
-            paint.start();
+            if (result) {
+                paint.start();
+            } else {
+                Toast.makeText(paint, "Save failed", Toast.LENGTH_LONG).show();
+            }
         }
         pDialog.dismiss();
 

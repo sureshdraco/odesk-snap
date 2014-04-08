@@ -36,6 +36,11 @@ public class InboxArrayAdapter extends ArrayAdapter<Snap> {
     }
 
     @Override
+    public int getCount() {
+        return snapList.size();
+    }
+
+    @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder viewHolder;
         if (convertView == null) {
@@ -68,6 +73,10 @@ public class InboxArrayAdapter extends ArrayAdapter<Snap> {
         }
         viewHolder.time.setText(dateFormat.format(new Date(snap.getTimeStamp())) + additionalText);
         return convertView;
+    }
+
+    public void setItems(ArrayList<Snap> snapList) {
+        this.snapList = snapList;
     }
 
     static class ViewHolder {
