@@ -32,12 +32,13 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.habosa.javasnap.Friend;
-import com.habosa.javasnap.Snap;
+import com.habosa.javasnap.ResponseModel;
 import com.habosa.javasnap.Snapchat;
 import com.snapchat.util.AppStorage;
 
 public class ContactsActivity extends Activity {
 
+    private static final String TAG = ContactsActivity.class.getSimpleName();
     int width, height;
     DisplayMetrics metrics = new DisplayMetrics();
     RelativeLayout.LayoutParams rParams;
@@ -54,6 +55,7 @@ public class ContactsActivity extends Activity {
         setContentView(R.layout.activity_contacts);
         if (getIntent() != null && getIntent().getExtras() != null) {
             path = getIntent().getExtras().getString("path");
+            Log.d(TAG, path);
         }
         getWindowManager().getDefaultDisplay().getMetrics(metrics);
         width = metrics.widthPixels;
@@ -109,7 +111,7 @@ public class ContactsActivity extends Activity {
                                     long arg3) {
                 if (!TextUtils.isEmpty(path)) {
                     ProgressDialog dialog = new ProgressDialog(ContactsActivity.this);
-                    dialog.setMessage("Getting Friends");
+                    dialog.setMessage("Sending snap...");
                     dialog.setCancelable(false);
                     new AsyncTask_SendSnap(dialog, ContactsActivity.this, friendList.get(position).getUsername()).execute();
                 }
@@ -148,7 +150,6 @@ public class ContactsActivity extends Activity {
             File file = createImageFile();
             if (file != null) {
                 mUri = Uri.fromFile(file);
-                path = file.getAbsolutePath();
                 Log.v("Path", "" + file.toString());
                 intent.putExtra(MediaStore.EXTRA_OUTPUT, mUri);
                 startActivityForResult(intent, 1);
@@ -261,10 +262,13 @@ public class ContactsActivity extends Activity {
             boolean isSent = false;
             String id = "";
             try {
-                id = Snapchat.upload(imageFile, AppStorage.getInstance(getApplicationContext()).getUsername(), AppStorage.getInstance(getApplicationContext()).getAuthToken());
-                if (id == null) {
+                ResponseModel responseModel = Snapchat.upload(imageFile, AppStorage.getInstance(getApplicationContext()).getUsername(), AppStorage.getInstance(getApplicationContext()).getAuthToken());
+                if (!responseModel.isSuccess()) {
                     isSent = false;
+                    Toast.makeText(getApplicationContext(), responseModel.getData(), Toast.LENGTH_LONG).show();
                 } else {
+                    Log.d(TAG, "id: " + id);
+                    id = responseModel.getData();
                     ArrayList<String> recepientList = new ArrayList<String>();
                     isSent = Snapchat.send(id, recepientList, false, 5, AppStorage.getInstance(getApplicationContext()).getUsername(), AppStorage.getInstance(getApplicationContext()).getAuthToken());
                 }

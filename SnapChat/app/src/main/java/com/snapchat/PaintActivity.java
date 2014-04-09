@@ -66,7 +66,7 @@ public class PaintActivity extends Activity {
 
             @Override
             public void onLoadingFailed(String s, View view, FailReason failReason) {
-                Log.e("bitmap", failReason.toString());
+                Log.e("bitmap", failReason.getType().name());
             }
 
             @Override
@@ -334,6 +334,8 @@ public class PaintActivity extends Activity {
 //                ((ImageButton) findViewById(R.id.paint_next)).setVisibility(View.INVISIBLE);
                 ProgressDialog dialog = new ProgressDialog(PaintActivity.this);
                 dialog.setCancelable(false);
+                dialog.setMessage("Saving image..");
+
                 Aysnc_Task task = new Aysnc_Task(dialog, 0, PaintActivity.this, 2);
                 task.execute("");
             }
@@ -377,7 +379,6 @@ public class PaintActivity extends Activity {
 //        }
 //        workingBitmap = BitmapFactory.decodeFile(path);
         workingBitmap = BitmapFilter.changeStyle(workingBitmap, id);
-        Apply();
     }
 
     public void closedrawers() {
@@ -396,10 +397,10 @@ public class PaintActivity extends Activity {
         String fileName = "SnapChatimage" + new Date().getTime();
         FileOutputStream out = null;
         try {
-            File image = File.createTempFile(fileName,".jpg", imagesFolder);
+            File image = File.createTempFile(fileName, ".jpg", imagesFolder);
             out = new FileOutputStream(image);
-            success = workingBitmap.compress(Bitmap.CompressFormat.PNG, 90, out);
-            outputImagePath = "file://" + image.getAbsolutePath();
+            success = workingBitmap.compress(Bitmap.CompressFormat.PNG, 0, out);
+            outputImagePath = image.getAbsolutePath();
 
         } catch (Exception e) {
             e.printStackTrace();

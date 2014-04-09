@@ -82,14 +82,6 @@ public class InboxActivity extends Activity {
     public static String USER_ID;
     private InboxArrayAdapter inboxArrayAdapter;
     private String mCurrentPhotoPath = "";
-    private static final String IMAGE_DIRECTORY_NAME = "snapss";
-    // Activity request codes
-    private static final int CAMERA_CAPTURE_IMAGE_REQUEST_CODE = 100;
-    private static final int CAMERA_CAPTURE_VIDEO_REQUEST_CODE = 200;
-    public static final int MEDIA_TYPE_IMAGE = 1;
-    public static final int MEDIA_TYPE_VIDEO = 2;
-    private Uri fileUri;
-    private Uri imageUri;
     private String path;
 
     @Override
@@ -121,7 +113,7 @@ public class InboxActivity extends Activity {
 
             @Override
             public void onClick(View v) {
-                gotoActivity(PaintActivity.class);
+                gotoActivity(ContactsActivity.class);
             }
         });
         settings.setOnClickListener(new OnClickListener() {
@@ -182,7 +174,6 @@ public class InboxActivity extends Activity {
             File file = createImageFile();
             if (file != null) {
                 mUri = Uri.fromFile(file);
-                path = file.getAbsolutePath();
                 Log.v("Path", "" + file.toString());
                 intent.putExtra(MediaStore.EXTRA_OUTPUT, mUri);
                 startActivityForResult(intent, 1);
@@ -213,7 +204,7 @@ public class InboxActivity extends Activity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 1) {
             if (resultCode == RESULT_OK) {
-                Log.e("FilePath", "" + path);
+                Log.e("FilePath", "" + mCurrentPhotoPath);
                 Intent intent = new Intent(InboxActivity.this, PaintActivity.class);
                 intent.putExtra("filepath", mCurrentPhotoPath);
                 startActivity(intent);
